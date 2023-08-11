@@ -16,3 +16,7 @@ spring:
   h2:
     console:
       enabled: true
+  task:
+    scheduling:
+      pool:
+        size: 5
