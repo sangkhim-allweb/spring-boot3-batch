@@ -2,7 +2,6 @@ package com.sangkhim.spring_boot3_batch.config.batch;
 
 import com.sangkhim.spring_boot3_batch.model.dto.CoffeeDTO;
 import javax.sql.DataSource;
-
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -53,28 +52,32 @@ public class BatchConfiguration {
         .build();
   }
 
-    @Bean
-    public Job importUserJob(JobRepository jobRepository, JobCompletionNotificationListener listener, Step step1) {
-        return new JobBuilder("importUserJob", jobRepository)
-                .incrementer(new RunIdIncrementer())
-                .listener(listener)
-                .flow(step1)
-                .end()
-                .build();
-    }
+  @Bean
+  public Job importUserJob(
+      JobRepository jobRepository, JobCompletionNotificationListener listener, Step step1) {
+    return new JobBuilder("importUserJob", jobRepository)
+        .incrementer(new RunIdIncrementer())
+        .listener(listener)
+        .flow(step1)
+        .end()
+        .build();
+  }
 
-    @Bean
-    public Step step1(JobRepository jobRepository, PlatformTransactionManager transactionManager, JdbcBatchItemWriter writer) {
-        return new StepBuilder("step1", jobRepository)
-                .<CoffeeDTO, CoffeeDTO> chunk(10, transactionManager)
-                .reader(reader())
-                .processor(processor())
-                .writer(writer)
-                .build();
-    }
+  @Bean
+  public Step step1(
+      JobRepository jobRepository,
+      PlatformTransactionManager transactionManager,
+      JdbcBatchItemWriter writer) {
+    return new StepBuilder("step1", jobRepository)
+        .<CoffeeDTO, CoffeeDTO>chunk(10, transactionManager)
+        .reader(reader())
+        .processor(processor())
+        .writer(writer)
+        .build();
+  }
 
-    @Bean
-    public CoffeeItemProcessor processor() {
-        return new CoffeeItemProcessor();
-    }
+  @Bean
+  public CoffeeItemProcessor processor() {
+    return new CoffeeItemProcessor();
+  }
 }
