@@ -5,14 +5,14 @@ DROP TABLE IF EXISTS tags;
 
 CREATE TABLE authors
 (
-  id   INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(250) NOT NULL
+    id   INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(250) NOT NULL
 );
 
 CREATE TABLE tags
 (
-  id   INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(250) NOT NULL
+    id   INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(250) NOT NULL
 );
 
 CREATE TABLE posts
@@ -21,7 +21,7 @@ CREATE TABLE posts
     title     VARCHAR(250) NOT NULL,
     body      VARCHAR(250) NOT NULL,
     author_id INT,
-    FOREIGN KEY (author_id) REFERENCES authors(id)
+    FOREIGN KEY (author_id) REFERENCES authors (id)
 );
 
 CREATE TABLE post_tags
@@ -29,6 +29,18 @@ CREATE TABLE post_tags
     post_id INT,
     tag_id  INT,
     PRIMARY KEY (post_id, tag_id),
-    FOREIGN KEY (post_id) REFERENCES posts(id),
-    FOREIGN KEY (tag_id) REFERENCES tags(id)
+    FOREIGN KEY (post_id) REFERENCES posts (id),
+    FOREIGN KEY (tag_id) REFERENCES tags (id)
+);
+
+// ----------------------------------------------------------
+
+DROP TABLE IF EXISTS coffee;
+
+CREATE TABLE coffee
+(
+    coffee_id       INT AUTO_INCREMENT PRIMARY KEY,
+    brand           VARCHAR(20),
+    origin          VARCHAR(20),
+    characteristics VARCHAR(30)
 );
