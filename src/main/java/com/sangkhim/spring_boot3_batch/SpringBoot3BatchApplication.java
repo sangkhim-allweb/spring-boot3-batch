@@ -1,21 +1,23 @@
 package com.sangkhim.spring_boot3_batch;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
+@RequiredArgsConstructor
+@Slf4j
 public class SpringBoot3BatchApplication implements CommandLineRunner {
 
-  @Autowired private JobLauncher jobLauncher;
-
-  @Autowired private Job job;
+  private final JobLauncher jobLauncher;
+  private final Job job;
 
   public static void main(String[] args) {
     SpringApplication.run(SpringBoot3BatchApplication.class, args);
@@ -29,8 +31,8 @@ public class SpringBoot3BatchApplication implements CommandLineRunner {
             .addString("testParam2", "testParam2")
             .toJobParameters();
 
-    System.out.println("BATCH STATUS :: START");
+    log.info("BATCH STATUS :: START");
     JobExecution execution = jobLauncher.run(job, jobParameters);
-    System.out.println("BATCH STATUS :: " + execution.getStatus());
+    log.info("BATCH STATUS :: " + execution.getStatus());
   }
 }
