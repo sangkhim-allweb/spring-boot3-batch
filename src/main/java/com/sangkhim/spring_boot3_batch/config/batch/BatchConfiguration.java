@@ -27,32 +27,6 @@ public class BatchConfiguration {
   private String fileInput;
 
   @Bean
-  public FlatFileItemReader reader() {
-    return new FlatFileItemReaderBuilder()
-        .name("coffeeItemReader")
-        .resource(new ClassPathResource(fileInput))
-        .delimited()
-        .names(new String[] {"brand", "origin", "characteristics"})
-        .fieldSetMapper(
-            new BeanWrapperFieldSetMapper() {
-              {
-                setTargetType(CoffeeDTO.class);
-              }
-            })
-        .build();
-  }
-
-  @Bean
-  public JdbcBatchItemWriter writer(DataSource dataSource) {
-    return new JdbcBatchItemWriterBuilder()
-        .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
-        .sql(
-            "INSERT INTO coffee (brand, origin, characteristics) VALUES (:brand, :origin, :characteristics)")
-        .dataSource(dataSource)
-        .build();
-  }
-
-  @Bean
   public Job importUserJob(
       JobRepository jobRepository, JobCompletionNotificationListener listener, Step step1) {
     return new JobBuilder("importUserJob", jobRepository)
@@ -77,7 +51,33 @@ public class BatchConfiguration {
   }
 
   @Bean
+  public FlatFileItemReader reader() {
+    return new FlatFileItemReaderBuilder()
+        .name("coffeeItemReader")
+        .resource(new ClassPathResource(fileInput))
+        .delimited()
+        .names(new String[] {"brand", "origin", "characteristics"})
+        .fieldSetMapper(
+            new BeanWrapperFieldSetMapper() {
+              {
+                setTargetType(CoffeeDTO.class);
+              }
+            })
+        .build();
+  }
+
+  @Bean
   public CoffeeItemProcessor processor() {
     return new CoffeeItemProcessor();
+  }
+
+  @Bean
+  public JdbcBatchItemWriter writer(DataSource dataSource) {
+    return new JdbcBatchItemWriterBuilder()
+        .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
+        .sql(
+            "INSERT INTO coffee (brand, origin, characteristics) VALUES (:brand, :origin, :characteristics)")
+        .dataSource(dataSource)
+        .build();
   }
 }

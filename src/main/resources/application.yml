@@ -20,5 +20,9 @@ spring:
     scheduling:
       pool:
         size: 5
+  batch:
+    job:
+      enabled: true
+
 file:
   input: coffee-list.csv
