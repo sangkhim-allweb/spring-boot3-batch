@@ -25,12 +25,12 @@ public class SpringBoot3BatchApplication implements CommandLineRunner {
   public void run(String... args) throws Exception {
     JobParameters jobParameters =
         new JobParametersBuilder()
-            .addString("sourceDir", "C://inputLocation")
-            .addString("destinationDir", "C://outputLocation")
+            .addString("testParam1", "testParam1")
+            .addString("testParam2", "testParam2")
             .toJobParameters();
 
     System.out.println("BATCH STATUS :: START");
-    JobExecution execution = jobLauncher.run(job, new JobParameters());
+    JobExecution execution = jobLauncher.run(job, jobParameters);
     System.out.println("BATCH STATUS :: " + execution.getStatus());
   }
 }

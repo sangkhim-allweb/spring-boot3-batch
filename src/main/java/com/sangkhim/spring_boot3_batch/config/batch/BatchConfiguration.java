@@ -28,7 +28,12 @@ public class BatchConfiguration {
 
   @Bean
   public Job importUserJob(
-      JobRepository jobRepository, JobCompletionNotificationListener listener, Step step1) {
+      JobRepository jobRepository,
+      JobCompletionNotificationListener listener,
+      Step step1,
+      @Value("${jobName:testParam1}") String testParam1,
+      @Value("${jobName:testParam2}") String testParam2) {
+
     return new JobBuilder("importUserJob", jobRepository)
         .incrementer(new RunIdIncrementer())
         .listener(listener)
@@ -41,17 +46,21 @@ public class BatchConfiguration {
   public Step step1(
       JobRepository jobRepository,
       PlatformTransactionManager transactionManager,
-      JdbcBatchItemWriter writer) {
+      JdbcBatchItemWriter writer,
+      @Value("${jobName:testParam1}") String testParam1,
+      @Value("${jobName:testParam2}") String testParam2) {
+
     return new StepBuilder("step1", jobRepository)
         .<CoffeeDTO, CoffeeDTO>chunk(10, transactionManager)
-        .reader(reader())
-        .processor(processor())
+        .reader(reader(testParam1, testParam2))
+        .processor(processor(testParam1, testParam2))
         .writer(writer)
         .build();
   }
 
   @Bean
-  public FlatFileItemReader reader() {
+  public FlatFileItemReader reader(String testParam1, String testParam2) {
+
     return new FlatFileItemReaderBuilder()
         .name("coffeeItemReader")
         .resource(new ClassPathResource(fileInput))
@@ -67,12 +76,14 @@ public class BatchConfiguration {
   }
 
   @Bean
-  public CoffeeItemProcessor processor() {
+  public CoffeeItemProcessor processor(String testParam1, String testParam2) {
+
     return new CoffeeItemProcessor();
   }
 
   @Bean
   public JdbcBatchItemWriter writer(DataSource dataSource) {
+
     return new JdbcBatchItemWriterBuilder()
         .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
         .sql(
