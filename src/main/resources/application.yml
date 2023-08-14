@@ -21,8 +21,11 @@ spring:
       pool:
         size: 5
   batch:
+    jdbc:
+      initialize-schema: always
+      platform: h2
     job:
-      enabled: true
+      enabled: false
 
 file:
   input: coffee-list.csv
