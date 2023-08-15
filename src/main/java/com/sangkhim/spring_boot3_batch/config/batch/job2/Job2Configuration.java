@@ -1,5 +1,6 @@
-package com.sangkhim.spring_boot3_batch.config.batch;
+package com.sangkhim.spring_boot3_batch.config.batch.job2;
 
+import com.sangkhim.spring_boot3_batch.config.batch.JobCompletionNotificationListener;
 import com.sangkhim.spring_boot3_batch.model.dto.CoffeeDTO;
 import javax.sql.DataSource;
 import org.springframework.batch.core.Job;
@@ -21,36 +22,36 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
-public class BatchConfiguration {
+public class Job2Configuration {
 
   @Value("${file.input}")
   private String fileInput;
 
   @Bean
-  public Job importUserJob(
+  public Job job2(
       JobRepository jobRepository,
       JobCompletionNotificationListener listener,
-      Step step1,
+      Step job2Step1,
       @Value("${jobName:testParam1}") String testParam1,
       @Value("${jobName:testParam2}") String testParam2) {
 
     return new JobBuilder("importUserJob", jobRepository)
         .incrementer(new RunIdIncrementer())
         .listener(listener)
-        .flow(step1)
+        .flow(job2Step1)
         .end()
         .build();
   }
 
   @Bean
-  public Step step1(
+  public Step job2Step1(
       JobRepository jobRepository,
       PlatformTransactionManager transactionManager,
       JdbcBatchItemWriter writer,
       @Value("${jobName:testParam1}") String testParam1,
       @Value("${jobName:testParam2}") String testParam2) {
 
-    return new StepBuilder("step1", jobRepository)
+    return new StepBuilder("job2Step1", jobRepository)
         .<CoffeeDTO, CoffeeDTO>chunk(10, transactionManager)
         .reader(reader(testParam1, testParam2))
         .processor(processor(testParam1, testParam2))

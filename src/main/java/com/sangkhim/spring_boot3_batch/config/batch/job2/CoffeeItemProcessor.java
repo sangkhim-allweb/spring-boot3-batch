@@ -1,4 +1,4 @@
-package com.sangkhim.spring_boot3_batch.config.batch;
+package com.sangkhim.spring_boot3_batch.config.batch.job2;
 
 import com.sangkhim.spring_boot3_batch.model.dto.CoffeeDTO;
 import lombok.extern.slf4j.Slf4j;
