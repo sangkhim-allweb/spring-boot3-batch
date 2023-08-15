@@ -35,7 +35,7 @@ public class Job2Configuration {
       @Value("${jobName:testParam1}") String testParam1,
       @Value("${jobName:testParam2}") String testParam2) {
 
-    return new JobBuilder("importUserJob", jobRepository)
+    return new JobBuilder("job2", jobRepository)
         .incrementer(new RunIdIncrementer())
         .listener(listener)
         .flow(job2Step1)

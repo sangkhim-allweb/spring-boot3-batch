@@ -34,8 +34,30 @@ public class ScheduledAnnotationExample {
   }
 
   @Async
-  @Scheduled(cron = "${cron.expression}")
-  public void scheduleTaskUsingExternalizedCronExpression() {
+  @Scheduled(cron = "${cron1.expression}")
+  public void scheduleJob1() {
+
+    JobParameters jobParameters =
+        new JobParametersBuilder().addDate("date", new Date()).toJobParameters();
+
+    try {
+      log.info("JOB 1 STARTED");
+      JobExecution execution = jobLauncher.run(job1, jobParameters);
+      log.info("JOB 1 STATUS :: " + execution.getStatus());
+    } catch (JobExecutionAlreadyRunningException e) {
+      throw new RuntimeException(e);
+    } catch (JobRestartException e) {
+      throw new RuntimeException(e);
+    } catch (JobInstanceAlreadyCompleteException e) {
+      throw new RuntimeException(e);
+    } catch (JobParametersInvalidException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Async
+  @Scheduled(cron = "${cron2.expression}")
+  public void scheduleJob2() {
 
     JobParameters jobParameters =
         new JobParametersBuilder()
@@ -45,12 +67,8 @@ public class ScheduledAnnotationExample {
             .toJobParameters();
 
     try {
-      log.info("JOB 1 STARTED");
-      JobExecution execution = jobLauncher.run(job1, jobParameters);
-      log.info("JOB 1 STATUS :: " + execution.getStatus());
-
       log.info("JOB 2 STARTED");
-      execution = jobLauncher.run(job2, jobParameters);
+      JobExecution execution = jobLauncher.run(job2, jobParameters);
       log.info("JOB 2 STATUS :: " + execution.getStatus());
     } catch (JobExecutionAlreadyRunningException e) {
       throw new RuntimeException(e);
