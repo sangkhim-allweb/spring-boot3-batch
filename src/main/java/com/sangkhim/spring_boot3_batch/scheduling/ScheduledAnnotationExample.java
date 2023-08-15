@@ -28,11 +28,7 @@ public class ScheduledAnnotationExample {
 
   @Async
   @Scheduled(cron = "${cron.expression}")
-  public void scheduleTaskUsingExternalizedCronExpression()
-      throws JobInstanceAlreadyCompleteException,
-          JobExecutionAlreadyRunningException,
-          JobParametersInvalidException,
-          JobRestartException {
+  public void scheduleTaskUsingExternalizedCronExpression() {
 
     JobParameters jobParameters =
         new JobParametersBuilder()
@@ -41,8 +37,17 @@ public class ScheduledAnnotationExample {
             .addString("testParam2", "testParam2")
             .toJobParameters();
 
-    log.info("BATCH STATUS :: START");
-    JobExecution execution = jobLauncher.run(job, jobParameters);
-    log.info("BATCH STATUS :: " + execution.getStatus());
+    try {
+      JobExecution execution = jobLauncher.run(job, jobParameters);
+      log.info("BATCH STATUS :: " + execution.getStatus());
+    } catch (JobExecutionAlreadyRunningException e) {
+      throw new RuntimeException(e);
+    } catch (JobRestartException e) {
+      throw new RuntimeException(e);
+    } catch (JobInstanceAlreadyCompleteException e) {
+      throw new RuntimeException(e);
+    } catch (JobParametersInvalidException e) {
+      throw new RuntimeException(e);
+    }
   }
 }
