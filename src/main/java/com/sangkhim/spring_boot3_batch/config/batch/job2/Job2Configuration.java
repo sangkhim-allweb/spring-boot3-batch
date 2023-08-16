@@ -12,13 +12,9 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder;
-import org.springframework.batch.item.file.FlatFileItemReader;
-import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
-import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
@@ -53,34 +49,34 @@ public class Job2Configuration {
 
     return new StepBuilder("job2Step1", jobRepository)
         .<CoffeeDTO, CoffeeDTO>chunk(10, transactionManager)
-        .reader(reader(testParam1, testParam2))
-        .processor(processor(testParam1, testParam2))
+        .reader(new Reader().setFileInput(fileInput, testParam1, testParam2))
+        .processor(new Processor())
         .writer(writer)
         .build();
   }
 
-  @Bean
-  public FlatFileItemReader reader(String testParam1, String testParam2) {
+  //  @Bean
+  //  public FlatFileItemReader reader(String testParam1, String testParam2) {
+  //
+  //    return new FlatFileItemReaderBuilder()
+  //        .name("coffeeItemReader")
+  //        .resource(new ClassPathResource(fileInput))
+  //        .delimited()
+  //        .names(new String[] {"brand", "origin", "characteristics"})
+  //        .fieldSetMapper(
+  //            new BeanWrapperFieldSetMapper() {
+  //              {
+  //                setTargetType(CoffeeDTO.class);
+  //              }
+  //            })
+  //        .build();
+  //  }
 
-    return new FlatFileItemReaderBuilder()
-        .name("coffeeItemReader")
-        .resource(new ClassPathResource(fileInput))
-        .delimited()
-        .names(new String[] {"brand", "origin", "characteristics"})
-        .fieldSetMapper(
-            new BeanWrapperFieldSetMapper() {
-              {
-                setTargetType(CoffeeDTO.class);
-              }
-            })
-        .build();
-  }
-
-  @Bean
-  public CoffeeItemProcessor processor(String testParam1, String testParam2) {
-
-    return new CoffeeItemProcessor();
-  }
+  //  @Bean
+  //  public CoffeeItemProcessor processor(String testParam1, String testParam2) {
+  //
+  //    return new CoffeeItemProcessor();
+  //  }
 
   @Bean
   public JdbcBatchItemWriter writer(DataSource dataSource) {

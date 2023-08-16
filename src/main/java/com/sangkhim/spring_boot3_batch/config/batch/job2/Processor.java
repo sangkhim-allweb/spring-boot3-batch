@@ -5,10 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
 
 @Slf4j
-public class CoffeeItemProcessor implements ItemProcessor<CoffeeDTO, CoffeeDTO> {
+public class Processor implements ItemProcessor<CoffeeDTO, CoffeeDTO> {
 
   @Override
-  public CoffeeDTO process(final CoffeeDTO coffee) {
+  public CoffeeDTO process(CoffeeDTO coffee) {
     String brand = coffee.getBrand().toUpperCase();
     String origin = coffee.getOrigin().toUpperCase();
     String characteristics = coffee.getCharacteristics().toUpperCase();
