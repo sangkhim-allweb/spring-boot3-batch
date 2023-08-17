@@ -10,6 +10,8 @@ public class Writer implements ItemWriter<CoffeeDTO> {
 
   @Override
   public void write(Chunk<? extends CoffeeDTO> chunk) {
-    log.info(chunk.toString());
+    for (CoffeeDTO msg : chunk) {
+      log.info("Writing the data :: " + msg);
+    }
   }
 }
