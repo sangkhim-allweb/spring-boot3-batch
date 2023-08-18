@@ -1,4 +1,4 @@
-package com.sangkhim.spring_boot3_batch.scheduling;
+package com.sangkhim.spring_boot3_batch.schedule;
 
 import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
@@ -20,14 +20,15 @@ import org.springframework.stereotype.Component;
 @Component
 @PropertySource("classpath:scheduled.properties")
 @Slf4j
-public class ScheduledAnnotationExample {
+public class ScheduleExample {
 
   private final JobLauncher jobLauncher;
   private final Job job1;
   private final Job job2;
 
-  public ScheduledAnnotationExample(
+  public ScheduleExample(
       JobLauncher jobLauncher, @Qualifier("job1") Job job1, @Qualifier("job2") Job job2) {
+
     this.jobLauncher = jobLauncher;
     this.job1 = job1;
     this.job2 = job2;

@@ -6,5 +6,5 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Configuration
 @EnableScheduling
-@ComponentScan("com.sangkhim.spring_boot3_batch.scheduling")
+@ComponentScan("com.sangkhim.spring_boot3_batch.schedule")
 public class SpringSchedulingConfig {}
